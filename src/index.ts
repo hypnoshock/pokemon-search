@@ -1,10 +1,49 @@
-import path from 'path';
-import fs from 'fs';
+import fastify from 'fastify';
+import { itemRoutes } from './routes/items';
+import swagger from '@fastify/swagger';
+import swaggerUI from '@fastify/swagger-ui';
 
-type TestData = { myData: string };
+const REST_PORT = 3000;
+const EXTERNAL_PORT = process.env.PORT || REST_PORT;
 
-const filePath = path.join(process.cwd(), 'data', 'test-data.json');
-const raw = fs.readFileSync(filePath, { encoding: 'utf8' });
-const data = JSON.parse(raw) as TestData;
+const server = fastify();
 
-console.log(data.myData);
+server.register(swagger, {
+  openapi: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Test swagger',
+      description: 'Testing the Fastify swagger API',
+      version: '0.1.0',
+    },
+    servers: [
+      {
+        url: `http://localhost:${EXTERNAL_PORT}`,
+        description: 'Development server',
+      },
+    ],
+    externalDocs: {
+      url: 'https://swagger.io',
+      description: 'Find more info here',
+    },
+  },
+});
+
+server.register(swaggerUI, {
+  routePrefix: '/docs',
+  uiConfig: {
+    docExpansion: 'list',
+    deepLinking: false,
+  },
+});
+
+server.register(itemRoutes);
+
+server.listen({ port: REST_PORT, host: '0.0.0.0' }, (err, address) => {
+  if (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+  // server.log.info(`Server listening at ${address}`);
+  console.log(`Server listening at ${address}`);
+});
