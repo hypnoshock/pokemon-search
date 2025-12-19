@@ -1,4 +1,4 @@
-import { RouteHandler } from 'fastify';
+import { RouteHandler, FastifyBaseLogger } from 'fastify';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -62,7 +62,7 @@ let pokemonMap: PokemonMap = {};
 let pricesMap: PricesMap = {};
 
 // Load all pokemon data during initialization
-export async function initializePokemonData(): Promise<void> {
+export async function initializePokemonData(logger: FastifyBaseLogger): Promise<void> {
   const pokemonDir = path.join(__dirname, '../../data/pokemon');
   const pricesFile = path.join(__dirname, '../../data/pokemon-prices.json');
 
@@ -85,7 +85,16 @@ export async function initializePokemonData(): Promise<void> {
 
       pokemonFiles.push(pokemon);
     } catch (error) {
-      console.error(`Failed to load pokemon ${id}:`, error);
+      const err = error as Error;
+      logger.error(
+        {
+          error: err.message,
+          stack: err.stack,
+          pokemonId: id,
+          event: 'pokemon_load_failed',
+        },
+        `Failed to load pokemon ${id}`
+      );
     }
   }
 
@@ -110,14 +119,27 @@ export async function initializePokemonData(): Promise<void> {
       return map;
     }, {} as PricesMap);
   } catch (error) {
-    console.warn('pokemon-prices.json not found or invalid, using default price of 0');
+    const err = error as Error;
+    logger.warn(
+      {
+        error: err.message,
+        event: 'prices_load_failed',
+      },
+      'pokemon-prices.json not found or invalid, using default price of 0'
+    );
     // Initialize with default prices (0) for all pokemon
     for (let id = 1; id <= 1025; id++) {
       pricesMap[id] = 0;
     }
   }
 
-  console.log(`Loaded ${Object.keys(pokemonMap).length} pokemon`);
+  logger.info(
+    {
+      event: 'pokemon_data_loaded',
+      count: Object.keys(pokemonMap).length,
+    },
+    `Loaded ${Object.keys(pokemonMap).length} pokemon`
+  );
 }
 
 // Get the count of loaded pokemon

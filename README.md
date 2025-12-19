@@ -9,7 +9,7 @@ A Node V24 TypeScript project built around the Fastify web framework. We are usi
 ```
 nvm use
 pnpm install
-pnpm run dev
+pnpm dev
 ```
 
 This will run the project using `nodemon` serving the api on port 3000. A simple swagger frontend will be served on `http://localhost:3000/docs`
