@@ -15,7 +15,7 @@ const POKEMON_DIR = path.join(__dirname, '..', 'data', 'pokemon');
 const MIN_DELAY_MS = 100;
 const MAX_CONCURRENT = 4;
 const START_ID = 1;
-const END_ID = 5;
+const END_ID = 300;
 
 // Ensure pokemon directory exists
 async function ensureDirectory() {
