@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon src/index.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "fetch-pokemon": "node scripts/fetch-pokemon.js"
   },
   "keywords": [],
   "author": "",
