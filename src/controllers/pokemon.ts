@@ -275,6 +275,11 @@ export const getPokemon: RouteHandler = async (req, res) => {
   // Apply sorting
   const sorted = sortPokemon(filtered, query.sort, query.order);
 
+  // Apply pagination
+  const limit = query.limit ? Number(query.limit) : 20;
+  const offset = query.offset ? Number(query.offset) : 0;
+  const paginated = sorted.slice(offset, offset + limit);
+
   // Build response
   const filtersApplied = buildFiltersApplied(query);
   const sortInfo = query.sort
@@ -285,8 +290,10 @@ export const getPokemon: RouteHandler = async (req, res) => {
     : undefined;
 
   res.send({
-    data: sorted,
-    count: sorted.length,
+    data: paginated,
+    count: paginated.length,
+    offset,
+    limit,
     filters_applied: filtersApplied,
     ...(sortInfo && { sort: sortInfo }),
   });

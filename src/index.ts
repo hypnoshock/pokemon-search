@@ -39,7 +39,7 @@ server.register(swaggerUI, {
   },
 });
 
-server.register(itemRoutes);
+// server.register(itemRoutes);
 server.register(pokemonRoutes);
 
 // Initialize pokemon data before starting server

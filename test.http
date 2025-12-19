@@ -21,3 +21,15 @@ GET http://localhost:3000/pokemon?attack_min=100&sort=attack&order=desc HTTP/1.1
 
 ### GET pokemon with multiple filters
 GET http://localhost:3000/pokemon?hp_min=50&attack_min=80&price_max=5000&bst_min=400 HTTP/1.1
+
+### GET pokemon with pagination (first page, default limit 20)
+GET http://localhost:3000/pokemon HTTP/1.1
+
+### GET pokemon with custom limit
+GET http://localhost:3000/pokemon?limit=10 HTTP/1.1
+
+### GET pokemon with offset and limit (second page)
+GET http://localhost:3000/pokemon?offset=20&limit=20 HTTP/1.1
+
+### GET pokemon with filters, sorting, and pagination
+GET http://localhost:3000/pokemon?attack_min=100&sort=attack&order=desc&offset=0&limit=10 HTTP/1.1

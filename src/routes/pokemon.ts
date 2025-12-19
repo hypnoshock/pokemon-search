@@ -30,6 +30,8 @@ const pokemonListResponseSchema = {
       items: pokemonSchema,
     },
     count: { type: 'number' },
+    offset: { type: 'number' },
+    limit: { type: 'number' },
     filters_applied: {
       type: 'object',
       additionalProperties: { type: 'number' },
@@ -69,6 +71,9 @@ const getPokemonOpts = {
         // Sorting
         sort: { type: 'string' },
         order: { type: 'string', enum: ['asc', 'desc'] },
+        // Pagination
+        limit: { type: 'number' },
+        offset: { type: 'number' },
       },
     },
     response: {
@@ -108,4 +113,3 @@ export function pokemonRoutes(server: FastifyInstance, options: any, done: () =>
 
   done();
 }
-
