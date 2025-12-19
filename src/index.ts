@@ -1,5 +1,7 @@
 import fastify from 'fastify';
 import { itemRoutes } from './routes/items';
+import { pokemonRoutes } from './routes/pokemon';
+import { initializePokemonData } from './controllers/pokemon';
 import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
 
@@ -38,12 +40,21 @@ server.register(swaggerUI, {
 });
 
 server.register(itemRoutes);
+server.register(pokemonRoutes);
 
-server.listen({ port: REST_PORT, host: '0.0.0.0' }, (err, address) => {
-  if (err) {
-    server.log.error(err);
+// Initialize pokemon data before starting server
+initializePokemonData()
+  .then(() => {
+    server.listen({ port: REST_PORT, host: '0.0.0.0' }, (err, address) => {
+      if (err) {
+        server.log.error(err);
+        process.exit(1);
+      }
+      // server.log.info(`Server listening at ${address}`);
+      console.log(`Server listening at ${address}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Failed to initialize pokemon data:', error);
     process.exit(1);
-  }
-  // server.log.info(`Server listening at ${address}`);
-  console.log(`Server listening at ${address}`);
-});
+  });

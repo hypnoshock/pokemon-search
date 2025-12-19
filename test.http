@@ -3,3 +3,21 @@ GET http://localhost:3000/items HTTP/1.1
 
 ### GET item by ID
 GET http://localhost:3000/items/2 HTTP/1.1
+
+### GET all pokemon
+GET http://localhost:3000/pokemon HTTP/1.1
+
+### GET pokemon by ID
+GET http://localhost:3000/pokemon/1 HTTP/1.1
+
+### GET pokemon by name
+GET http://localhost:3000/pokemon/bulbasaur HTTP/1.1
+
+### GET pokemon with filters (attack range)
+GET http://localhost:3000/pokemon?attack_min=100&attack_max=150 HTTP/1.1
+
+### GET pokemon with filters and sorting
+GET http://localhost:3000/pokemon?attack_min=100&sort=attack&order=desc HTTP/1.1
+
+### GET pokemon with multiple filters
+GET http://localhost:3000/pokemon?hp_min=50&attack_min=80&price_max=5000&bst_min=400 HTTP/1.1
