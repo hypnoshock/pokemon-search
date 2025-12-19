@@ -7,7 +7,7 @@
     "build": "tsc",
     "dev": "nodemon src/index.ts | pino-pretty",
     "lint": "eslint .",
-    "fetch-pokemon": "node scripts/fetch-pokemon.js",
+    "fetch-pokemon": "START_ID=1 END_ID=300 FORCE=false node scripts/fetch-pokemon.js",
     "test": "jest"
   },
   "keywords": [],

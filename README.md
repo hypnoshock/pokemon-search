@@ -4,7 +4,13 @@ A Node V24 TypeScript project built around the Fastify web framework. We are usi
 
 ## Running the project
 
-### For development
+`pnpm fetch-pokemon` must be run before either dev or docker build
+
+The project relies on prefetched data cached as .json files. Fetch them by running the pre-build script `pnpm fetch-pokemon`. This will fetch the first 300 pokemon from the pokemon api. The range can be configured within `package.json` or by calling the script directly with env vars `START_ID=1 END_ID=300 node scripts/fetch-pokemon.js`.
+
+If the start and end ids aren't specified they'll default to 1 and 1025.
+
+### Development
 
 ```
 nvm use
@@ -16,7 +22,7 @@ This will run the project using `nodemon` serving the api on port 3000. A simple
 
 For use with the REST Client VSCode plugin, there is a `test.http` file that can be used to test queries
 
-### Production
+### Using the docker container
 
 A dockerfile has been provided which is configured to expose port 3000. It can be run via the following commands
 

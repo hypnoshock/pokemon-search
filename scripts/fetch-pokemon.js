@@ -14,8 +14,9 @@ const BASE_URL = 'https://pokeapi.co/api/v2/pokemon';
 const POKEMON_DIR = path.join(__dirname, '..', 'data', 'pokemon');
 const MIN_DELAY_MS = 100;
 const MAX_CONCURRENT = 4;
-const START_ID = 1;
-const END_ID = 300;
+const START_ID = parseInt(process.env.START_ID || '1', 10);
+const END_ID = parseInt(process.env.END_ID || '1025', 10);
+const FORCE = process.env.FORCE === 'true';
 
 // Ensure pokemon directory exists
 async function ensureDirectory() {
@@ -65,9 +66,27 @@ async function savePokemon(id, data) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
+// Check if Pokemon file exists
+async function pokemonFileExists(id) {
+  const filePath = path.join(POKEMON_DIR, `${id}.json`);
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Process a single Pokemon ID
 async function processPokemon(id) {
   try {
+    // Check if file exists and FORCE is false
+    const fileExists = await pokemonFileExists(id);
+    if (fileExists && !FORCE) {
+      console.log(`⊘ Pokemon ${id} already exists, skipping (use FORCE=true to overwrite)`);
+      return { id, success: true };
+    }
+
     const data = await fetchPokemon(id);
     await savePokemon(id, data);
     console.log(`✓ Pokemon ${id} fetched and saved successfully`);
@@ -141,6 +160,9 @@ async function processWithRateLimit(ids, delayMs = MIN_DELAY_MS, maxConcurrent =
 async function main() {
   console.log('Starting Pokemon fetch process...');
   console.log(`Fetching Pokemon IDs ${START_ID} to ${END_ID}`);
+  console.log(
+    `Force mode: ${FORCE ? 'enabled (will overwrite existing files)' : 'disabled (will skip existing files)'}`
+  );
   console.log(
     `Rate limit: ${MIN_DELAY_MS}ms between calls, max ${MAX_CONCURRENT} concurrent requests\n`
   );
