@@ -96,6 +96,7 @@ order - either asc or desc (default to asc if omitted)
 
 ## Project layout
 
+```
 data
 ├── pokemon
 └── pokemon-prices.json
@@ -107,6 +108,7 @@ src
 └── routes
 ├── health.ts
 └── pokemon.ts
+```
 
 The main entry point to the project is `src/index.ts`
 Routes are registered as Fastify plugins and we have separated the routes and the controller logic to allow for the ability to easily switch controller logic e.g. if we would one day like to experiment with the pokemon being stored in a database.
