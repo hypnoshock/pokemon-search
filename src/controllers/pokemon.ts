@@ -120,6 +120,11 @@ export async function initializePokemonData(): Promise<void> {
   console.log(`Loaded ${Object.keys(pokemonMap).length} pokemon`);
 }
 
+// Get the count of loaded pokemon
+export function getPokemonCount(): number {
+  return Object.keys(pokemonMap).length;
+}
+
 // Transform raw pokemon data to response format
 function transformPokemon(rawPokemon: RawPokemon, price: number): PokemonResponse {
   // Transform stats array to object

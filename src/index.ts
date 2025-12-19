@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import { itemRoutes } from './routes/items';
 import { pokemonRoutes } from './routes/pokemon';
+import { healthRoutes } from './routes/health';
 import { initializePokemonData } from './controllers/pokemon';
 import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
@@ -41,6 +42,7 @@ server.register(swaggerUI, {
 
 // server.register(itemRoutes);
 server.register(pokemonRoutes);
+server.register(healthRoutes);
 
 // Initialize pokemon data before starting server
 initializePokemonData()

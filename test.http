@@ -39,3 +39,6 @@ GET http://localhost:3000/pokemon/budget-picks HTTP/1.1
 
 ### GET budget picks with budget filter
 GET http://localhost:3000/pokemon/budget-picks?budget=400 HTTP/1.1
+
+### GET health check
+GET http://localhost:3000/health HTTP/1.1
