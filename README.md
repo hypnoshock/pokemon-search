@@ -20,7 +20,7 @@ pnpm dev
 
 This will run the project using `nodemon` serving the api on port 3000. A simple swagger frontend will be served on `http://localhost:3000/docs`
 
-For use with the REST Client VSCode plugin, there is a `test.http` file that can be used to test queries
+For testing the API endpoints, you can use the `test.http` file with the REST Client VSCode plugin. This file contains example requests for all available endpoints.
 
 ### Using the docker container
 
@@ -40,11 +40,11 @@ docker run -p 4000:3000 -e PORT=4000 node-template
 ## Overview
 
 This project provides a REST api to allow users to search for pokemon.
-Pokemon can be searched by:
+Pokemon can be searched using the following endpoints:
 
-`/pokemon` (retrieves all pokemon ordered by ID)
-`/pokemon/:id` (retrieves a single pokemon by ID)
-`/pokemon/:name` (retrieves a single pokemon by name)
+- `GET /pokemon` - Retrieves all pokemon (ordered by ID by default). Supports filtering, sorting, and pagination via query parameters.
+- `GET /pokemon/:identifier` - Retrieves a single pokemon by ID (numeric) or name (string).
+- `GET /pokemon/budget-picks` - Retrieves pokemon with the best BST (Base Stat Total) for their price. Supports budget filtering and pagination via query parameters.
 
 ### Query Parameters Pattern
 
