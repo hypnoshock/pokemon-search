@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { getPokemon, getPokemonByIdOrName } from '../controllers/pokemon';
+import { getPokemon, getPokemonByIdOrName, getBudgetPicks } from '../controllers/pokemon';
 
 const pokemonSchema = {
   type: 'object',
@@ -105,8 +105,27 @@ const getPokemonByIdOrNameOpts = {
   handler: getPokemonByIdOrName,
 };
 
+const getBudgetPicksOpts = {
+  schema: {
+    querystring: {
+      type: 'object',
+      properties: {
+        budget: { type: 'number' },
+        limit: { type: 'number' },
+        offset: { type: 'number' },
+      },
+    },
+    response: {
+      200: pokemonListResponseSchema,
+    },
+  },
+  handler: getBudgetPicks,
+};
+
 export function pokemonRoutes(server: FastifyInstance, options: any, done: () => void) {
   server.get('/pokemon', getPokemonOpts);
+  // Register specific routes before parameterized routes to avoid conflicts
+  server.get('/pokemon/budget-picks', getBudgetPicksOpts);
   // This route handles both /pokemon/:id and /pokemon/:name
   // The handler checks if the identifier is numeric (ID) or a string (name)
   server.get('/pokemon/:identifier', getPokemonByIdOrNameOpts);

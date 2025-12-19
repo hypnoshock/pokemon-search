@@ -33,3 +33,9 @@ GET http://localhost:3000/pokemon?offset=20&limit=20 HTTP/1.1
 
 ### GET pokemon with filters, sorting, and pagination
 GET http://localhost:3000/pokemon?attack_min=100&sort=attack&order=desc&offset=0&limit=10 HTTP/1.1
+
+### GET budget picks (best BST for price)
+GET http://localhost:3000/pokemon/budget-picks HTTP/1.1
+
+### GET budget picks with budget filter
+GET http://localhost:3000/pokemon/budget-picks?budget=400 HTTP/1.1

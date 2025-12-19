@@ -366,3 +366,52 @@ export const getPokemonByIdOrName: RouteHandler = async (req, res) => {
     return res.send(pokemon);
   }
 };
+
+// Get budget picks - pokemon ordered by BST/price (bang for buck)
+export const getBudgetPicks: RouteHandler = async (req, res) => {
+  const query = req.query as Record<string, string>;
+  const budget = query.budget ? Number(query.budget) : undefined;
+
+  // Transform all pokemon to response format
+  const allPokemon = Object.values(pokemonMap).map((rawPokemon) => {
+    const price = pricesMap[rawPokemon.id] ?? 0;
+    return transformPokemon(rawPokemon, price);
+  });
+
+  // Filter by budget if provided
+  let filtered = allPokemon;
+  if (budget !== undefined && !isNaN(budget)) {
+    filtered = allPokemon.filter((pokemon) => pokemon.price <= budget);
+  }
+
+  // Sort by BST/price (descending - highest value first)
+  // Handle division by zero: if price is 0, treat as Infinity (infinite value)
+  const sorted = [...filtered].sort((a, b) => {
+    const aRatio = a.price > 0 ? a.bst / a.price : Infinity;
+    const bRatio = b.price > 0 ? b.bst / b.price : Infinity;
+    return bRatio - aRatio; // Descending order
+  });
+
+  // Apply pagination
+  const limit = query.limit ? Number(query.limit) : 20;
+  const offset = query.offset ? Number(query.offset) : 0;
+  const paginated = sorted.slice(offset, offset + limit);
+
+  // Build response
+  const filtersApplied: Record<string, number> = {};
+  if (budget !== undefined && !isNaN(budget)) {
+    filtersApplied.budget = budget;
+  }
+
+  res.send({
+    data: paginated,
+    count: paginated.length,
+    offset,
+    limit,
+    filters_applied: filtersApplied,
+    sort: {
+      field: 'bst/price',
+      order: 'desc',
+    },
+  });
+};
