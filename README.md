@@ -27,14 +27,14 @@ For testing the API endpoints, you can use the `test.http` file with the REST Cl
 A dockerfile has been provided which is configured to expose port 3000. It can be run via the following commands
 
 ```
-docker build -t pokemon-api .
-docker run -p 3000:3000 pokemon-api
+docker build -t pokemon-search .
+docker run -p 3000:3000 pokemon-search
 ```
 
 If you choose to use a different local port, you must provide a `PORT` env var with your local port in order for the swagger ui to know the correct endpoint
 
 ```
-docker run -p 4000:3000 -e PORT=4000 node-template
+docker run -p 4000:3000 -e PORT=4000 pokemon-search
 ```
 
 ## Overview
