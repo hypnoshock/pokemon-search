@@ -98,9 +98,19 @@ export async function initializePokemonData(): Promise<void> {
   // Load prices file
   try {
     const pricesContent = await fs.readFile(pricesFile, 'utf-8');
-    pricesMap = JSON.parse(pricesContent);
+    const pricesArray = JSON.parse(pricesContent) as Array<{
+      id: number;
+      name: string;
+      price: number;
+    }>;
+
+    // Convert array to map keyed by ID
+    pricesMap = pricesArray.reduce((map, item) => {
+      map[item.id] = item.price;
+      return map;
+    }, {} as PricesMap);
   } catch (error) {
-    console.warn('pokemon-prices.json not found, using default price of 0');
+    console.warn('pokemon-prices.json not found or invalid, using default price of 0');
     // Initialize with default prices (0) for all pokemon
     for (let id = 1; id <= 1025; id++) {
       pricesMap[id] = 0;
@@ -152,10 +162,7 @@ function transformPokemon(rawPokemon: RawPokemon, price: number): PokemonRespons
 }
 
 // Filter pokemon based on query parameters
-function filterPokemon(
-  pokemon: PokemonResponse,
-  query: Record<string, string>
-): boolean {
+function filterPokemon(pokemon: PokemonResponse, query: Record<string, string>): boolean {
   // Stat filters
   const statFilters = ['hp', 'attack', 'defense', 'special-attack', 'special-defense'];
   for (const stat of statFilters) {
@@ -310,9 +317,7 @@ export const getPokemonByName: RouteHandler = async (req, res) => {
   const { name } = req.params as { name: string };
   const nameLower = name.toLowerCase();
 
-  const rawPokemon = Object.values(pokemonMap).find(
-    (p) => p.name.toLowerCase() === nameLower
-  );
+  const rawPokemon = Object.values(pokemonMap).find((p) => p.name.toLowerCase() === nameLower);
 
   if (!rawPokemon) {
     return res.status(404).send({ message: 'Pokemon not found' });
@@ -343,9 +348,7 @@ export const getPokemonByIdOrName: RouteHandler = async (req, res) => {
   } else {
     // Treat as name
     const nameLower = identifier.toLowerCase();
-    const rawPokemon = Object.values(pokemonMap).find(
-      (p) => p.name.toLowerCase() === nameLower
-    );
+    const rawPokemon = Object.values(pokemonMap).find((p) => p.name.toLowerCase() === nameLower);
 
     if (!rawPokemon) {
       return res.status(404).send({ message: 'Pokemon not found' });
@@ -356,4 +359,3 @@ export const getPokemonByIdOrName: RouteHandler = async (req, res) => {
     return res.send(pokemon);
   }
 };
-

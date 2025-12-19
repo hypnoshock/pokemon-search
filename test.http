@@ -8,10 +8,10 @@ GET http://localhost:3000/items/2 HTTP/1.1
 GET http://localhost:3000/pokemon HTTP/1.1
 
 ### GET pokemon by ID
-GET http://localhost:3000/pokemon/1 HTTP/1.1
+GET http://localhost:3000/pokemon/4 HTTP/1.1
 
 ### GET pokemon by name
-GET http://localhost:3000/pokemon/bulbasaur HTTP/1.1
+GET http://localhost:3000/pokemon/pikachu HTTP/1.1
 
 ### GET pokemon with filters (attack range)
 GET http://localhost:3000/pokemon?attack_min=100&attack_max=150 HTTP/1.1
