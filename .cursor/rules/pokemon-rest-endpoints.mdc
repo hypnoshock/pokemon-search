@@ -1,0 +1,58 @@
+---
+alwaysApply: true
+---
+
+This project provides a REST api to allow users to search for pokemon.
+Pokemon can be searched by:
+
+`/pokemon` (retrieves all pokemon ordered by ID)
+`/pokemon/:id` (retrieves a single pokemon by ID)
+`/pokemon/:name` (retrieves a single pokemon by name)
+
+### Query Parameters Pattern
+
+For filtering by ranges, use suffix patterns:
+
+{stat}\_min - minimum value (inclusive)
+{stat}\_max - maximum value (inclusive)
+price_min - minimum value (inclusive)
+price_max - maximum value (inclusive)
+bst_min - minimum value (inclusive)
+bst_max - maximum value (inclusive)
+
+For sorting:
+
+sort - the stat field to sort by
+order - either asc or desc (default to asc if omitted)
+
+### An example of the response format
+
+```
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Example Pokemon",
+      "image": "http://path-to-image.png"
+      "stats": {
+        "hp": 850,
+        "attack": 145,
+        "defense": 90,
+        "special-attack": 150,
+        "special-defense": 100,
+      },
+      "bst": 1335,
+      "price": 1000
+    }
+  ],
+  "count": 1,
+  "filters_applied": {
+    "atk_min": 100,
+    "atk_max": 150
+  },
+  "sort": {
+    "field": "attack",
+    "order": "desc"
+  }
+}
+```

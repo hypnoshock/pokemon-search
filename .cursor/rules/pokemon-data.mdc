@@ -1,0 +1,69 @@
+---
+alwaysApply: true
+---
+
+The data for each of the 1025 pokemon is found in `data/pokemon` as a set of individual .json files named by id. They are all loaded upfront during initialisation phase and stored as objects keyed by ID in a map within `controller/pokemon.ts`
+
+Each of the .json files contain superfluous data so each of the stored pokemon objects contain only a subset of this data:
+
+```
+id (number)
+name (string)
+sprites.other.official-artwork.front_default (string)
+stats (array of stat objects)
+types (array of type objects)
+
+```
+
+### example of stat object
+
+```
+{
+  "base_stat": 45,
+  "effort": 0,
+  "stat": {
+    "name": "hp",
+    "url": "https://pokeapi.co/api/v2/stat/1/"
+  }
+}
+```
+
+### example of type object
+
+```
+{
+  "slot": 1,
+  "type": {
+    "name": "grass",
+    "url": "https://pokeapi.co/api/v2/type/12/"
+  }
+}
+```
+
+## Pokemon schema
+
+The data served up over the REST api for each of the pokemon is a union of the data stored in the pokemon map (found in the pokemon.ts controller with data derived from the pokemon .json files), the price of the pokemon (`pokemon-prices.json`) and a pre-calculated BST rating
+
+```
+const pokemonSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'number' },
+    name: { type: 'string' },
+    image: { type: 'string' },
+    stats: {
+      type: 'object',
+      properties: {
+        hp: { type: 'number' },
+        attack: { type: 'number' },
+        defense: { type: 'number' },
+        'special-attack': { type: 'number' },
+        'special-defense': { type: 'number' }
+      }
+    },
+    bst: { type: 'number' },
+    price: { type: 'number' }
+  }
+};
+
+```

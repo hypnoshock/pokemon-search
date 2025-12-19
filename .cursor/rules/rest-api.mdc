@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+We are using the Fastify web framework to implement the REST api. We are keeping routes and controller logic separate by putting the routes in the `src/routes` folder and controllers in `src/controller`
+
+We are maintaining a basic `test.http` file which allows us to make simple REST requests via the REST Client VSCode plugin. This is so we can quickly test the endpoint in the IDE during development. Any new routes should have at least one example in the `test.http` file
